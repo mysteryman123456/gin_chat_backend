@@ -3,11 +3,24 @@ import { PORT } from "./config/index";
 import { connectToDatabase } from "./database/mongodb";
 import authRoutes from "./routes/auth.route";
 import { errorMiddleware } from "./middleware/error.middleware";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
+app.use(
+  cors({
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 connectToDatabase();
 

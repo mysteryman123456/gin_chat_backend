@@ -6,4 +6,8 @@ export class JwtUtil {
       expiresIn: "7d",
     });
   }
+  static verifyToken(token: string) {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    return payload;
+  }
 }

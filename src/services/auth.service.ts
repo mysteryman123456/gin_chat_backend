@@ -36,10 +36,19 @@ export class AuthService {
     if (!isPasswordValid) throw new HttpError("Invalid email or password", 400);
 
     const token = JwtUtil.generateToken({
+      profile_image: user.profile_image ?? null,
+      username: user.username,
+      email: user.email,
       id: user._id,
       role: user.role,
     });
 
-    return { token };
+    return {
+      token,
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      password: user.password,
+    };
   }
 }
