@@ -3,7 +3,7 @@ import { HttpError } from "../utils/http_error";
 
 export const errorMiddleware = (
   err: any,
-  req: Request,
+  _: Request,
   res: Response,
   next: NextFunction
 ) => {
