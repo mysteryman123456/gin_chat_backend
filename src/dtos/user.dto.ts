@@ -34,3 +34,9 @@ export const LoginSchema = GeneralUserScehema.pick({
   password: true,
 });
 export type LoginData = z.infer<typeof LoginSchema>;
+
+export const UpdateUserProfileSchema = GeneralUserScehema.pick({
+  username: true,
+  profile_image: true,
+});
+export type UpdateUserProfileData = z.infer<typeof UpdateUserProfileSchema>;
