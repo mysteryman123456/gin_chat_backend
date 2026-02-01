@@ -14,7 +14,7 @@ export class AuthRepository {
   async loginUser(email: string) {
     return UserModel.findOne(
       { email },
-      { _id: 1, username: 1, email: 1, password: 1 }
+      { _id: 1, username: 1, email: 1, password: 1, role: 1, profile_image: 1 }
     );
   }
 }

@@ -3,7 +3,7 @@ import { GeneralUserDataType } from "../dtos/user.dto";
 
 export interface IUser extends GeneralUserDataType, Document {
   _id: mongoose.Types.ObjectId;
-  isBlocked: boolean;
+  is_blocked: boolean;
   role: string;
   createdAt: Date;
   updatedAt: Date;
@@ -16,7 +16,7 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     profile_image: { type: String, required: false },
-    isBlocked: { type: Boolean, default: false },
+    is_blocked: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
