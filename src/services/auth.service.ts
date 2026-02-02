@@ -26,7 +26,7 @@ export class AuthService {
     const user = await this.authRepo.loginUser(data.email);
     if (!user) throw new HttpError("Invalid email or password", 400);
 
-    if (user.isBlocked) throw new HttpError("User is blocked", 400);
+    if (user.is_blocked) throw new HttpError("User is blocked", 400);
 
     const isPasswordValid = await HashUtil.compare(
       data.password,
@@ -39,7 +39,7 @@ export class AuthService {
       profile_image: user.profile_image ?? null,
       username: user.username,
       email: user.email,
-      id: user._id,
+      _id: user._id,
       role: user.role,
     });
 
@@ -48,7 +48,6 @@ export class AuthService {
       _id: user._id,
       email: user.email,
       username: user.username,
-      password: user.password,
     };
   }
 }

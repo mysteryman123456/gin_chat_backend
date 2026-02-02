@@ -7,6 +7,7 @@ const authController = new AuthController();
 
 authRoute.post("/login", authController.login);
 authRoute.post("/signup", authController.signup);
+authRoute.post("/logout", authController.logout);
 authRoute.get("/verify-token", authController.verifyToken);
 
 export default authRoute;
