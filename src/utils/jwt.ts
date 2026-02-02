@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { JwtPayload } from "../types/user";
 
 export class JwtUtil {
   static generateToken(payload: object): string {
@@ -8,6 +9,6 @@ export class JwtUtil {
   }
   static verifyToken(token: string) {
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
-    return payload;
+    return payload as JwtPayload;
   }
 }
