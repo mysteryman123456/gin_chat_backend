@@ -5,16 +5,22 @@ import authRoutes from "./routes/auth.route";
 import { errorMiddleware } from "./middleware/error.middleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import imageUploadRoute from "./routes/image_upload.route";
+import fileUploadRoute from "./routes/file_upload.route";
 import userRoute from "./routes/user.route";
 import adminRoutes from "./routes/admin.route";
+import conversationRoutes from "./routes/conversation.route";
+import { initSocketServer } from "./socket_server";
+import http from "http";
+import messageRoute from "./routes/message.route";
 
 const app = express();
+
+const server = http.createServer(app);
 
 app.use(
   cors({
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: [process.env.FRONTEND_URL!, "http://localhost:3001"],
     credentials: true,
   })
 );
@@ -30,9 +36,11 @@ connectToDatabase();
 const routes = [
   {
     auth: authRoutes,
-    upload: imageUploadRoute,
+    upload: fileUploadRoute,
     user: userRoute,
     admin: adminRoutes,
+    message: messageRoute,
+    conversation: conversationRoutes,
   },
 ];
 //
@@ -44,4 +52,5 @@ routes.forEach((route) => {
 //
 app.use(errorMiddleware);
 //
-app.listen(PORT);
+initSocketServer(server);
+server.listen(PORT);
