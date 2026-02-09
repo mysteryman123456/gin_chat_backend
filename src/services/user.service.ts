@@ -10,9 +10,18 @@ export class UserService {
     this.userRepo = new UserRepository();
   }
 
-  async updateProfile(id: string, data: UpdateUserProfileData): Promise<IUser> {
+  updateProfile = async (
+    id: string,
+    data: UpdateUserProfileData
+  ): Promise<IUser> => {
     const updatedUser = await this.userRepo.updateProfile(id, data);
     if (!updatedUser) throw new HttpError("User not found", 400);
     return updatedUser;
-  }
+  };
+
+  getSearchedUser = async (user: string) => {
+    const searched_users = await this.userRepo.getSearchedUser(user);
+    if (!searched_users) throw new HttpError("User not found", 400);
+    return searched_users;
+  };
 }

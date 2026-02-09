@@ -60,4 +60,31 @@ export class AuthController {
       message: "Logged out successfully",
     });
   };
+
+  forgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    if (!email) throw new HttpError("Email is required", 400);
+
+    const token = await this.authService.forgotPassword(email);
+
+    return res.json({
+      success: true,
+      message: "If email exists, OTP sent.",
+      data: { token },
+    });
+  };
+
+  resetPassword = async (req: Request, res: Response) => {
+    const { password, otp } = req.body;
+    const token = req.query.token as string;
+
+    if (!token) throw new HttpError("Token missing", 400);
+    await this.authService.resetPassword(token, otp, password);
+
+    return res.json({
+      success: true,
+      message: "Password reset successful",
+    });
+  };
 }

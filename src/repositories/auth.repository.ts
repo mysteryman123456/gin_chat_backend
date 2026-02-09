@@ -17,4 +17,29 @@ export class AuthRepository {
       { _id: 1, username: 1, email: 1, password: 1, role: 1, profile_image: 1 }
     );
   }
+
+  async setOtp(email: string, otp: string, expires: Date): Promise<void> {
+    await UserModel.updateOne(
+      { email },
+      {
+        $set: {
+          otp,
+          otp_expires: expires,
+        },
+      }
+    );
+  }
+
+  async updatePasswordAndClearOtp(
+    email: string,
+    hashedPassword: string
+  ): Promise<void> {
+    await UserModel.updateOne(
+      { email },
+      {
+        $set: { password: hashedPassword },
+        $unset: { otp: "", otp_expires: "" },
+      }
+    );
+  }
 }
