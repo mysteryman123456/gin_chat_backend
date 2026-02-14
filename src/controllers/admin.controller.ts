@@ -7,8 +7,13 @@ export class AdminController {
   private adminService = new AdminService();
 
   getAllUsers = async (req: Request, res: Response) => {
-    const users = await this.adminService.getAllUsers();
-    return res.json({ success: true, data: users });
+    let pageNo = 1;
+    let { page } = req.query;
+    if (typeof page === "string" && page !== undefined && page !== null) {
+      pageNo = Number(page);
+    }
+    const response = await this.adminService.getAllUsers(pageNo);
+    return res.json({ success: true, data: response });
   };
 
   createUser = async (req: Request, res: Response) => {
