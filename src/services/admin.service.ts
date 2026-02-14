@@ -6,12 +6,21 @@ import {
 import { IUser } from "../models/user.model";
 import { HttpError } from "../utils/http_error";
 import { HashUtil } from "../utils/hash";
+import { DEFAULT_PAGINATION_LIMIT } from "../config";
 
 export class AdminService {
   private adminRepo = new AdminRepository();
 
-  async getAllUsers(): Promise<IUser[]> {
-    return this.adminRepo.getAllUsers();
+  async getAllUsers(page: number) {
+    const [count, users] = await Promise.all([
+      this.adminRepo.countAllUsers(),
+      this.adminRepo.getAllUsers(page),
+    ]);
+    return {
+      users: users,
+      current_page: page,
+      total_pages: Math.ceil(count / DEFAULT_PAGINATION_LIMIT),
+    };
   }
 
   async createUser(data: CreateAdminUserData) {

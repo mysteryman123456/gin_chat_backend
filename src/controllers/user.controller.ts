@@ -21,4 +21,11 @@ export class UserController {
     );
     return res.json({ success: true, data: updatedUser });
   };
+
+  getSearchedUser = async (req: Request, res: Response) => {
+    const { user } = req.params;
+    if (!user.trim()) throw new HttpError("Search params is required", 400);
+    const searched_users = await this.userService.getSearchedUser(user);
+    return res.status(200).json({ data: searched_users, success: true });
+  };
 }
