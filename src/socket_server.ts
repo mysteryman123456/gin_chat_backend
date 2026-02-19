@@ -19,7 +19,6 @@ export function initSocketServer(app: HttpServer) {
   io.on("connection", (socket) => {
     socket.on("join_online", ({ userId }) => {
       onlineUsers.set(userId, socket.id);
-      // broadcast updated online list
       io?.emit("online_users", Array.from(onlineUsers.keys()));
     });
 
@@ -42,6 +41,37 @@ export function initSocketServer(app: HttpServer) {
     });
 
     // web rtc
+    socket.on("call_user", ({ conversationId, callerId, callerName }) => {
+      socket.to(conversationId).emit("incoming_call", {
+        conversationId,
+        callerId,
+        callerName,
+      });
+    });
+
+    socket.on("call_accepted", ({ conversationId }) => {
+      socket.to(conversationId).emit("call_accepted", { conversationId });
+    });
+
+    socket.on("call_rejected", ({ conversationId }) => {
+      socket.to(conversationId).emit("call_rejected", { conversationId });
+    });
+
+    socket.on("call_ended", ({ conversationId }) => {
+      socket.to(conversationId).emit("call_ended", { conversationId });
+    });
+
+    socket.on("offer", ({ offer, conversationId }) => {
+      socket.to(conversationId).emit("offer", offer);
+    });
+
+    socket.on("answer", ({ answer, conversationId }) => {
+      socket.to(conversationId).emit("answer", answer);
+    });
+
+    socket.on("ice-candidate", ({ candidate, conversationId }) => {
+      socket.to(conversationId).emit("ice-candidate", candidate);
+    });
 
     socket.on("disconnect", () => {
       for (const [userId, socketId] of onlineUsers.entries()) {
