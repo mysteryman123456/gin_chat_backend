@@ -14,7 +14,7 @@ export class UserController {
   }
 
   updateProfile = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const validation = UpdateUserProfileSchema.safeParse(req.body);
     if (!validation.success)
       throw new HttpError(validation.error.issues[0].message, 400);
@@ -26,7 +26,7 @@ export class UserController {
   };
 
   getSearchedUser = async (req: Request, res: Response) => {
-    const { user } = req.params;
+    const user = req.params.user as string;
     if (!user.trim()) throw new HttpError("Search params is required", 400);
     const searched_users = await this.userService.getSearchedUser(user);
     return res.status(200).json({ data: searched_users, success: true });
