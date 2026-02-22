@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AdminService } from "../services/admin.service";
-import { GeneralUserScehema } from "../dtos/user.dto";
+import { GeneralUserScehema, UpdateUserByAdminSchema } from "../dtos/user.dto";
 import { HttpError } from "../utils/http_error";
 
 export class AdminController {
@@ -41,5 +41,29 @@ export class AdminController {
     const { id } = req.params;
     await this.adminService.deleteUser(id);
     return res.json({ success: true, message: "User deleted successfully" });
+  };
+
+  getUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = await this.adminService.getUserById(id);
+    return res.json({
+      success: true,
+      data: user,
+    });
+  };
+
+  updateUserByAdminById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const validation = UpdateUserByAdminSchema.safeParse(req.body);
+    if (!validation.success) {
+      throw new HttpError(validation.error.issues[0].message, 400);
+    }
+
+    const updatedUser = await this.adminService.updateUserDetailsByAdmin(
+      id,
+      validation.data
+    );
+    return res.json({ success: true, data: updatedUser });
   };
 }

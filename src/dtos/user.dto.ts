@@ -40,3 +40,12 @@ export const UpdateUserProfileSchema = GeneralUserScehema.pick({
   profile_image: true,
 });
 export type UpdateUserProfileData = z.infer<typeof UpdateUserProfileSchema>;
+
+export const UpdateUserByAdminSchema = z.object({
+  username: z.string().min(1).optional(),
+  profile_image: z.string().optional().nullable(),
+  role: z.enum(["user", "admin"]),
+  is_blocked: z.boolean(),
+});
+
+export type UpdateUserByAdminType = z.infer<typeof UpdateUserByAdminSchema>;
