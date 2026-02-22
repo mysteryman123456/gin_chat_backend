@@ -37,8 +37,9 @@ class AuthController {
             const result = await this.authService.login(validatedData.data);
             res.cookie("token", result.token, {
                 httpOnly: true,
-                sameSite: "lax",
-                secure: false,
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
             });
             return res.status(200).json({
                 success: true,

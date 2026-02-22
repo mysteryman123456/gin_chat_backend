@@ -7,7 +7,7 @@ const http_error_1 = require("../utils/http_error");
 class UserController {
     constructor() {
         this.updateProfile = async (req, res) => {
-            const { id } = req.params;
+            const id = req.params.id;
             const validation = user_dto_1.UpdateUserProfileSchema.safeParse(req.body);
             if (!validation.success)
                 throw new http_error_1.HttpError(validation.error.issues[0].message, 400);
@@ -15,7 +15,7 @@ class UserController {
             return res.json({ success: true, data: updatedUser });
         };
         this.getSearchedUser = async (req, res) => {
-            const { user } = req.params;
+            const user = req.params.user;
             if (!user.trim())
                 throw new http_error_1.HttpError("Search params is required", 400);
             const searched_users = await this.userService.getSearchedUser(user);

@@ -9,8 +9,8 @@ class AdminController {
         this.adminService = new admin_service_1.AdminService();
         this.getAllUsers = async (req, res) => {
             let pageNo = 1;
-            let { page } = req.query;
-            if (typeof page === "string" && page !== undefined && page !== null) {
+            const { page } = req.query;
+            if (page) {
                 pageNo = Number(page);
             }
             const response = await this.adminService.getAllUsers(pageNo);
@@ -29,18 +29,18 @@ class AdminController {
             });
         };
         this.updateUser = async (req, res) => {
-            const { id } = req.params;
+            const id = req.params.id;
             const data = req.body;
             const updatedUser = await this.adminService.updateUser(id, data);
             return res.json({ success: true, data: updatedUser });
         };
         this.deleteUser = async (req, res) => {
-            const { id } = req.params;
+            const id = req.params.id;
             await this.adminService.deleteUser(id);
             return res.json({ success: true, message: "User deleted successfully" });
         };
         this.getUserById = async (req, res) => {
-            const { id } = req.params;
+            const id = req.params.id;
             const user = await this.adminService.getUserById(id);
             return res.json({
                 success: true,
@@ -48,7 +48,7 @@ class AdminController {
             });
         };
         this.updateUserByAdminById = async (req, res) => {
-            const { id } = req.params;
+            const id = req.params.id;
             const validation = user_dto_1.UpdateUserByAdminSchema.safeParse(req.body);
             if (!validation.success) {
                 throw new http_error_1.HttpError(validation.error.issues[0].message, 400);
