@@ -8,8 +8,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("../config");
 async function connectToDatabase() {
     try {
-        console.log("Connected successfully");
         await mongoose_1.default.connect(config_1.MONGO_URI);
+        console.log("Database Connected successfully");
     }
     catch (e) {
         console.log(e);
