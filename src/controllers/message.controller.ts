@@ -3,7 +3,7 @@ import { MessageService } from "../services/message.service";
 
 export class MessageController {
   static async getMessages(req: Request, res: Response) {
-    const { conversation_id } = req.params;
+    const conversation_id = req.params.conversation_id as string;
 
     const messages = await MessageService.getMessages(conversation_id);
 
