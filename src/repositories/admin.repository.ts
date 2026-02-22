@@ -1,5 +1,5 @@
 import { IUser, UserModel } from "../models/user.model";
-import { GeneralUserDataType } from "../dtos/user.dto";
+import { GeneralUserDataType, UpdateUserByAdminType } from "../dtos/user.dto";
 import { DEFAULT_PAGINATION_LIMIT } from "../config";
 
 export type UpdateAdminUserData = Pick<
@@ -46,5 +46,22 @@ export class AdminRepository {
   //
   async deleteUserById(id: string): Promise<IUser | null> {
     return UserModel.findByIdAndDelete(id);
+  }
+  //
+  async findById(id: string) {
+    return UserModel.findById(id).select(
+      "username profile_image is_blocked role email"
+    );
+  }
+
+  async updateUserDetailsByAdmin(
+    id: string,
+    data: UpdateUserByAdminType
+  ): Promise<IUser | null> {
+    return UserModel.findByIdAndUpdate(
+      id,
+      { $set: data },
+      { new: true, select: "-password" }
+    );
   }
 }

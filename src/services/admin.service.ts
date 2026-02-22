@@ -7,6 +7,7 @@ import { IUser } from "../models/user.model";
 import { HttpError } from "../utils/http_error";
 import { HashUtil } from "../utils/hash";
 import { DEFAULT_PAGINATION_LIMIT } from "../config";
+import { UpdateUserByAdminType } from "../dtos/user.dto";
 
 export class AdminService {
   private adminRepo = new AdminRepository();
@@ -41,5 +42,20 @@ export class AdminService {
   async deleteUser(id: string): Promise<void> {
     const deletedUser = await this.adminRepo.deleteUserById(id);
     if (!deletedUser) throw new HttpError("User not found", 404);
+  }
+
+  async getUserById(id: string) {
+    const user = await this.adminRepo.findById(id);
+    if (!user) throw new HttpError("User not found", 404);
+    return user;
+  }
+
+  async updateUserDetailsByAdmin(
+    id: string,
+    data: UpdateUserByAdminType
+  ): Promise<IUser> {
+    const updatedUser = await this.adminRepo.updateUserDetailsByAdmin(id, data);
+    if (!updatedUser) throw new HttpError("User not found", 404);
+    return updatedUser;
   }
 }
