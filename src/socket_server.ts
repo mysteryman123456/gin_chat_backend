@@ -38,6 +38,15 @@ export function initSocketServer(app: HttpServer) {
         sender_id: new Types.ObjectId(data.sender_id),
       });
       socket.to(data.conversation_id).emit("receive_message", data);
+      const receiverSocketId = onlineUsers.get(data.receiver_info.receiver_id);
+      if (receiverSocketId) {
+        io?.to(receiverSocketId).emit("live_message", {
+          conversation_id: data.conversation_id,
+          type: data.type,
+          by: data.receiver_info.by,
+          content: data.content,
+        });
+      }
     });
 
     // web rtc

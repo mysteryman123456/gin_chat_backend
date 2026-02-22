@@ -49,3 +49,11 @@ export const UpdateUserByAdminSchema = z.object({
 });
 
 export type UpdateUserByAdminType = z.infer<typeof UpdateUserByAdminSchema>;
+
+export const updatePasswordSchema = z.object({
+  old_password: z.string().min(1),
+  new_password: z.string().min(6, "Password must be at least 6 characters"),
+  confirm_password: z.string().min(1),
+});
+
+export type UpdatePasswordType = z.infer<typeof updatePasswordSchema>;

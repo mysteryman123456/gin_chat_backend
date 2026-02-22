@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { UpdateUserProfileSchema } from "../dtos/user.dto";
+import {
+  UpdateUserProfileSchema,
+  updatePasswordSchema,
+} from "../dtos/user.dto";
 import { HttpError } from "../utils/http_error";
 
 export class UserController {
@@ -27,5 +30,18 @@ export class UserController {
     if (!user.trim()) throw new HttpError("Search params is required", 400);
     const searched_users = await this.userService.getSearchedUser(user);
     return res.status(200).json({ data: searched_users, success: true });
+  };
+
+  updatePassword = async (req: Request, res: Response) => {
+    const validation = updatePasswordSchema.safeParse(req.body);
+    if (!validation.success) {
+      throw new HttpError(validation.error.issues[0].message, 400);
+    }
+    console.log(req.user);
+    await this.userService.updatePassword(req.user?._id!, validation.data);
+    return res.json({
+      success: true,
+      message: "Password updated successfully",
+    });
   };
 }

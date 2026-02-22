@@ -46,4 +46,10 @@ export class UserRepository {
       { new: true, select: "-password" }
     );
   }
+
+  async updatePasswordById(id: string, hashedPassword: string) {
+    return UserModel.findByIdAndUpdate(id, {
+      $set: { password: hashedPassword },
+    });
+  }
 }
