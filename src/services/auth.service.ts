@@ -60,22 +60,22 @@ export class AuthService {
     if (!user) return null;
 
     const otp = generateOtp(6);
-    const expires = new Date(Date.now() + 3 * 60 * 1000);
+    const expires = new Date(Date.now() + 5 * 60 * 1000);
 
     await this.authRepo.setOtp(email, otp, expires);
 
-    await emailService.sendEmail(
+    emailService.sendEmail(
       email,
       "Password Reset OTP",
       `
         <h2>Password Reset</h2>
         <p>Your OTP is:</p>
         <h1>${otp}</h1>
-        <p>This OTP expires in 3 minutes.</p>
+        <p>This OTP expires in 5 minutes.</p>
       `
     );
 
-    const token = JwtUtil.generateToken({ email }, "3m");
+    const token = JwtUtil.generateToken({ email }, "5m");
 
     return token;
   }

@@ -11,8 +11,8 @@ class EmailService {
     },
   });
 
-  async sendEmail(to: string, subject: string, html: string) {
-    await this.transporter.sendMail({
+  sendEmail(to: string, subject: string, html: string) {
+    this.transporter.sendMail({
       from: `"GinChat" <${process.env.SMTP_USER}>`,
       to,
       subject,
