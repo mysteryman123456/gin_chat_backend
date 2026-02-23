@@ -22,8 +22,13 @@ export class AuthController {
   };
 
   verifyToken = async (req: Request, res: Response) => {
-    const token = req.cookies.token;
-    if (!token) throw new HttpError("Unauthorized", 401);
+    const authHeader = req.headers.authorization;
+    if (!authHeader) throw new HttpError("Authentication token missing", 401);
+    const parts = authHeader.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      throw new HttpError("Invalid authorization format", 401);
+    }
+    const token = parts[1];
     const payload = JwtUtil.verifyToken(token);
     return res.status(200).json({
       success: true,
