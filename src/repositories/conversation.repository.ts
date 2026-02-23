@@ -20,18 +20,26 @@ interface MessagedUsers {
 }
 
 export class ConversationRepository {
-  //
   async createConversation(data: ConversationType): Promise<void> {
+    const sortedIds = [data.created_by, data.user_id].sort();
+
+    if (data.type === "SINGLE") {
+      const existing = await ConversationModel.findOne({
+        type: "SINGLE",
+        participants: { $all: sortedIds, $size: 2 },
+      });
+
+      if (existing) return;
+    }
+
     await ConversationModel.create({
       type: data.type,
       group_name: data.group_name,
       created_by: data.created_by,
-      participants: [data.created_by, data.user_id].sort(),
+      participants: sortedIds,
     });
   }
-  //
 
-  //
   async addUsersInGroupUsingConversationId(
     data: AddUserInGroupType
   ): Promise<void> {

@@ -27,11 +27,6 @@ const ConversationSchema = new Schema(
   { timestamps: true, collection: "conversation" }
 );
 //
-ConversationSchema.index(
-  { type: 1, participants: 1 },
-  { unique: true, partialFilterExpression: { type: "SINGLE" } }
-);
-//
 export const ConversationModel = mongoose.model(
   "Conversation",
   ConversationSchema
