@@ -16,8 +16,16 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies?.token;
-  if (!token) return next(new HttpError("Authentication token missing", 401));
+  const authHeader = req.headers.authorization;
+  if (!authHeader)
+    return next(new HttpError("Authentication token missing", 401));
+
+  const parts = authHeader.split(" ");
+  if (parts.length !== 2 || parts[0] !== "Bearer") {
+    return next(new HttpError("Invalid authorization format", 401));
+  }
+
+  const token = parts[1];
 
   try {
     const user = JwtUtil.verifyToken(token);
