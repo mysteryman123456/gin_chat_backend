@@ -39,9 +39,9 @@ export class AuthController {
     const result = await this.authService.login(validatedData.data);
     res.cookie("token", result.token, {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: "none",
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return res.status(200).json({
       success: true,
@@ -53,8 +53,8 @@ export class AuthController {
   logout = async (req: Request, res: Response) => {
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      sameSite: "none",
+      secure: true,
     });
     return res.status(200).json({
       success: true,
