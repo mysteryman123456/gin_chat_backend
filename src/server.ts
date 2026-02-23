@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { PORT } from "./config/index";
 import { connectToDatabase } from "./database/mongodb";
 import authRoutes from "./routes/auth.route";
@@ -50,6 +50,9 @@ routes.forEach((route) => {
   });
 });
 //
+app.get("/api/health", (req: Request, res: Response) => {
+  return res.status(200).json({ success: true });
+});
 app.use(errorMiddleware);
 //
 initSocketServer(server);
