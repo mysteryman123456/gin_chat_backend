@@ -37,28 +37,10 @@ export class AuthController {
     if (!validatedData.success)
       throw new HttpError(validatedData.error.issues[0].message, 400);
     const result = await this.authService.login(validatedData.data);
-    res.cookie("token", result.token, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
     return res.status(200).json({
       success: true,
       message: "Login successful",
       data: result,
-    });
-  };
-
-  logout = async (req: Request, res: Response) => {
-    res.clearCookie("token", {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
-    return res.status(200).json({
-      success: true,
-      message: "Logged out successfully",
     });
   };
 
