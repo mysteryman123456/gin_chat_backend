@@ -2,12 +2,6 @@ import { Types } from "mongoose";
 import { AddUserInGroupType, ConversationType } from "../dtos/conversation.dto";
 import { ConversationModel } from "../models/conversation";
 
-interface PopulatedUser {
-  _id: Types.ObjectId;
-  username: string;
-  profile_image?: string | null;
-}
-
 interface MessagedUsers {
   users: {
     username: string;
